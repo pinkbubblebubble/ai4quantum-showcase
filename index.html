@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Qumus — Autonomous Discovery of 2D Quantum Materials</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -29,7 +26,7 @@
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
       background: var(--bone);
       color: var(--text);
       overflow-x: hidden;
@@ -56,8 +53,8 @@
       border-bottom: 1px solid var(--rule);
     }
     .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; font-weight: 500; font-style: italic;
+      
+      font-size: 1.2rem; font-weight: 500; 
       text-decoration: none; transition: color .3s;
     }
     #nav.dark .nav-logo { color: #fff; }
@@ -103,9 +100,9 @@
       animation: up .8s .05s both;
     }
     .hero h1 {
-      font-family: 'Playfair Display', serif;
+      
       font-size: clamp(3.8rem, 10vw, 9rem);
-      font-weight: 500; font-style: italic;
+      font-weight: 500; 
       line-height: 1.0; letter-spacing: -.025em;
       color: #fff; margin-bottom: 2rem;
       animation: up .9s .18s both;
@@ -162,9 +159,9 @@
     /* ── MANIFESTO ── */
     .manifesto { background: var(--bone); padding: 92px 2rem; text-align: center; }
     .manifesto blockquote {
-      font-family: 'Playfair Display', serif;
+      
       font-size: clamp(1.45rem, 3.2vw, 2.5rem);
-      font-style: italic; font-weight: 400;
+       font-weight: 400;
       color: var(--text); line-height: 1.38;
       letter-spacing: -.02em; max-width: 800px; margin: 0 auto;
     }
@@ -193,7 +190,7 @@
     .kicker-dim { color: rgba(255,255,255,.28); }
 
     .display {
-      font-family: 'Playfair Display', serif;
+      
       font-size: clamp(2rem, 4vw, 3.2rem);
       font-weight: 500; letter-spacing: -.025em;
       line-height: 1.1; color: var(--text); margin-bottom: 1rem;
@@ -215,12 +212,12 @@
     .trio-card { background: var(--white); padding: 2.6rem 2rem; transition: background .2s; }
     .trio-card:hover { background: #fafaf8; }
     .trio-num {
-      font-family: 'Space Mono', monospace;
+      
       font-size: .65rem; color: var(--muted); display: block; margin-bottom: 1.5rem;
     }
     .trio-icon { font-size: 1.7rem; margin-bottom: .9rem; display: block; }
     .trio-card h3 {
-      font-family: 'Playfair Display', serif;
+      
       font-size: 1.12rem; font-weight: 500;
       letter-spacing: -.02em; color: var(--text); margin-bottom: .55rem;
     }
@@ -229,9 +226,9 @@
     /* ── RESEARCH SPLIT ── */
     .split { display: grid; grid-template-columns: 1fr 1fr; gap: 5.5rem; align-items: start; }
     .pull {
-      font-family: 'Playfair Display', serif;
+      
       font-size: clamp(1.1rem, 2vw, 1.5rem);
-      font-style: italic; line-height: 1.5;
+       line-height: 1.5;
       color: var(--text); letter-spacing: -.01em;
       border-left: 2px solid var(--azure);
       padding-left: 1.3rem; margin-top: 2.4rem;
@@ -242,7 +239,7 @@
       border-radius: 14px; padding: 1.4rem;
     }
     .stat-val {
-      font-family: 'Playfair Display', serif;
+      
       font-size: 2.4rem; font-weight: 500;
       letter-spacing: -.05em; color: var(--azure); line-height: 1;
     }
@@ -266,12 +263,12 @@
     .fig-img.contain { object-fit: contain; padding: 1.5rem; }
     .fig-meta { padding: 1.25rem 1.5rem 1.5rem; }
     .fig-code {
-      font-family: 'Space Mono', monospace;
+      
       font-size: .64rem; color: var(--azure);
       letter-spacing: .06em; display: block; margin-bottom: .32rem;
     }
     .fig-meta h4 {
-      font-family: 'Playfair Display', serif;
+      
       font-size: .98rem; font-weight: 500; color: var(--text); margin-bottom: .28rem;
     }
     .fig-meta p { font-size: .81rem; color: var(--sub); line-height: 1.5; font-weight: 300; }
@@ -288,12 +285,12 @@
     .vid-card iframe { width: 100%; aspect-ratio: 16/9; display: block; border: none; }
     .vid-meta { padding: 1.1rem 1.4rem 1.3rem; background: var(--white); }
     .vid-code {
-      font-family: 'Space Mono', monospace;
+      
       font-size: .64rem; color: var(--muted);
       letter-spacing: .06em; display: block; margin-bottom: .22rem;
     }
     .vid-meta h4 {
-      font-family: 'Playfair Display', serif;
+      
       font-size: .96rem; font-weight: 500; color: var(--text);
     }
 
@@ -307,11 +304,11 @@
       width: 58px; height: 58px; border-radius: 50%;
       background: linear-gradient(135deg, var(--azure), var(--violet));
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Playfair Display', serif;
+      
       font-size: 1.45rem; color: #fff; margin-bottom: 1.4rem;
     }
     .t-name {
-      font-family: 'Playfair Display', serif;
+      
       font-size: 1.2rem; font-weight: 500; color: #fff;
       letter-spacing: -.02em; margin-bottom: .18rem;
     }
@@ -386,19 +383,6 @@
   </div>
 </div>
 
-<!-- MANIFESTO -->
-<section class="manifesto rv">
-  <div class="wrap">
-    <blockquote>
-      "From automated experiments to <em>self-evolving intelligence</em> —
-      Qumus learns from the past to autonomously discover
-      the quantum materials of the future."
-    </blockquote>
-  </div>
-</section>
-
-<div class="rule"></div>
-
 <!-- OVERVIEW -->
 <section class="sec cream" id="overview">
   <div class="wrap">
@@ -436,9 +420,6 @@
       <div class="rv">
         <span class="kicker">Research Vision</span>
         <h2 class="display">From Self-Driving<br>to Self-Evolving</h2>
-        <blockquote class="pull">
-          "The laboratory becomes a mind — it remembers, it learns, it explores."
-        </blockquote>
       </div>
       <div class="rv d1">
         <div class="body" style="margin-bottom:2.2rem">
