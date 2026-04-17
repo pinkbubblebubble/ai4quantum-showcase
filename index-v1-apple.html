@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qumus — Self-Driving Labs for 2D Quantum Material Discovery</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:    #0071e3;
+      --blue-h:  #0077ed;
+      --text:    #1d1d1f;
+      --sub:     #6e6e73;
+      --dim:     #86868b;
+      --bg:      #f5f5f7;
+      --white:   #ffffff;
+      --border:  #d2d2d7;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+                   'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+      background: var(--white);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      height: 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 22px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.12);
+    }
+    .nav-logo {
+      font-size: .95rem; font-weight: 700; letter-spacing: -.025em;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 1.6rem; list-style: none; }
+    .nav-links a {
+      font-size: .78rem; color: rgba(0,0,0,0.55); text-decoration: none;
+      transition: color .15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 144px 24px 96px;
+      text-align: center;
+      background: var(--white);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: .78rem; font-weight: 500; letter-spacing: .02em;
+      color: var(--blue);
+      margin-bottom: 1.4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(3.4rem, 8vw, 6.4rem);
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-sub {
+      font-size: clamp(.95rem, 1.8vw, 1.2rem);
+      color: var(--sub);
+      max-width: 540px;
+      margin: 0 auto 2.4rem;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .btn-group { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .62rem 1.5rem;
+      border-radius: 980px;
+      font-size: .88rem; font-weight: 400;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background .15s, opacity .15s;
+      letter-spacing: -.01em;
+    }
+    .btn-filled { background: var(--blue); color: #fff; }
+    .btn-filled:hover { background: var(--blue-h); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--blue);
+      border: 1px solid rgba(0,0,0,0.16);
+    }
+    .btn-ghost:hover { background: rgba(0,0,0,0.03); }
+
+    .wordmark-row {
+      margin-top: 4.5rem;
+      display: flex; align-items: center; justify-content: center; gap: 1.2rem;
+      font-size: .72rem; color: var(--dim); letter-spacing: .01em;
+    }
+    .wordmark-sep { width: 1px; height: 12px; background: var(--border); }
+
+    /* ── DIVIDER ── */
+    .rule { height: 1px; background: var(--border); }
+
+    /* ── SECTION BASE ── */
+    .section { padding: 96px 24px; }
+    .section-gray { background: var(--bg); }
+    .container { max-width: 980px; margin: 0 auto; }
+    .container-wide { max-width: 1200px; margin: 0 auto; }
+
+    .kicker {
+      font-size: .72rem; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: .85rem;
+    }
+    .heading {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700; letter-spacing: -.03em;
+      line-height: 1.1; color: var(--text);
+      margin-bottom: 1rem;
+    }
+    .body-copy {
+      font-size: 1rem; color: var(--sub);
+      line-height: 1.75; max-width: 560px;
+    }
+    .body-copy p + p { margin-top: .9rem; }
+
+    /* ── FEATURE TRIO ── */
+    .trio {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 3.5rem;
+    }
+    .trio-card {
+      background: var(--white);
+      padding: 2.6rem 2rem;
+      transition: background .2s;
+    }
+    .trio-card:hover { background: #fafafa; }
+    .trio-icon { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
+    .trio-card h3 {
+      font-size: 1.05rem; font-weight: 600;
+      letter-spacing: -.02em; color: var(--text);
+      margin-bottom: .55rem;
+    }
+    .trio-card p { font-size: .88rem; color: var(--sub); line-height: 1.65; }
+
+    /* ── RESEARCH SPLIT ── */
+    .split {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+    }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .stat-tile {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.6rem;
+    }
+    .stat-val {
+      font-size: 2.6rem; font-weight: 700;
+      letter-spacing: -.06em; color: var(--blue);
+      line-height: 1;
+    }
+    .stat-label {
+      margin-top: .35rem;
+      font-size: .78rem; color: var(--sub); line-height: 1.4;
+    }
+
+    /* ── FIGURES ── */
+    .fig-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem; margin-top: 3.5rem;
+    }
+    .fig-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      transition: box-shadow .3s ease, transform .3s ease;
+    }
+    .fig-card:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,.1);
+      transform: translateY(-3px);
+    }
+    .fig-card img {
+      width: 100%; height: 260px;
+      object-fit: cover; display: block;
+      background: var(--bg);
+    }
+    .fig-card img.contain { object-fit: contain; padding: 1.5rem; }
+    .fig-meta { padding: 1.2rem 1.5rem 1.4rem; }
+    .fig-label {
+      font-size: .68rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: .3rem;
+    }
+    .fig-meta h4 {
+      font-size: .97rem; font-weight: 600;
+      color: var(--text); margin-bottom: .3rem;
+    }
+    .fig-meta p { font-size: .83rem; color: var(--sub); line-height: 1.5; }
+
+    /* ── VIDEOS ── */
+    .vid-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; margin-bottom: 3.5rem;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .vid-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .vid-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      transition: box-shadow .3s ease, transform .3s ease;
+    }
+    .vid-card:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,.09);
+      transform: translateY(-3px);
+    }
+    .vid-card iframe {
+      width: 100%; aspect-ratio: 16/9;
+      display: block; border: none;
+    }
+    .vid-meta { padding: 1.1rem 1.4rem 1.3rem; background: var(--white); }
+    .vid-label {
+      font-size: .68rem; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--sub); margin-bottom: .25rem;
+    }
+    .vid-meta h4 { font-size: .95rem; font-weight: 600; color: var(--text); }
+
+    /* ── TEAM ── */
+    .team-card {
+      max-width: 500px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 2.6rem;
+      margin-top: 3.5rem;
+    }
+    .avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, #0071e3, #5856d6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.55rem; color: #fff; margin-bottom: 1.4rem;
+    }
+    .team-name { font-size: 1.2rem; font-weight: 700; letter-spacing: -.025em; margin-bottom: .2rem; }
+    .team-role { font-size: .88rem; color: var(--blue); font-weight: 500; margin-bottom: .3rem; }
+    .team-inst { font-size: .83rem; color: var(--sub); margin-bottom: 1.2rem; }
+    .team-bio { font-size: .9rem; color: var(--sub); line-height: 1.68; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2.2rem 24px;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    footer p { font-size: .72rem; color: var(--dim); }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity .9s cubic-bezier(.25,.46,.45,.94),
+                  transform .9s cubic-bezier(.25,.46,.45,.94);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .d1 { transition-delay: .1s; }
+    .d2 { transition-delay: .2s; }
+    .d3 { transition-delay: .3s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .split { grid-template-columns: 1fr; gap: 3rem; }
+      .trio { grid-template-columns: 1fr; }
+      .fig-grid, .vid-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      nav { padding: 0 16px; }
+      .nav-links { display: none; }
+      .section { padding: 72px 16px; }
+      .hero { padding: 120px 16px 72px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Qumus</a>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#demos">Demos</a></li>
+    <li><a href="#team">Team</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="eyebrow">Princeton University &nbsp;·&nbsp; Department of Physics</span>
+  <h1>AI for Quantum<br>Materials.</h1>
+  <p class="hero-sub">
+    A self-evolving multi-agent system that autonomously discovers
+    2D quantum materials — learning from every experiment to
+    continuously push the frontiers of materials science.
+  </p>
+  <div class="btn-group">
+    <a href="#demos" class="btn btn-filled">Watch Demos</a>
+    <a href="#research" class="btn btn-ghost">Learn More</a>
+    <a href="#" class="btn btn-ghost">Read Paper ↗</a>
+    <a href="#" class="btn btn-ghost">Try Platform ↗</a>
+  </div>
+  <div class="wordmark-row">
+    <span>Wu Lab</span>
+    <span class="wordmark-sep"></span>
+    <span>Department of Physics</span>
+    <span class="wordmark-sep"></span>
+    <span>Princeton University</span>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- OVERVIEW -->
+<section class="section section-gray" id="overview">
+  <div class="container">
+    <div class="kicker">The System</div>
+    <h2 class="heading">Self-Driving. Self-Evolving.<br>Fully Autonomous.</h2>
+    <p class="body-copy">From closed-loop experimentation to multi-agent intelligence — our platform redefines how quantum materials are discovered.</p>
+    <div class="trio">
+      <div class="trio-card reveal">
+        <span class="trio-icon">⚡</span>
+        <h3>Self-Driving Lab</h3>
+        <p>Fully automated pipelines that design, execute, and analyze experiments without human intervention — running continuously around the clock.</p>
+      </div>
+      <div class="trio-card reveal d1">
+        <span class="trio-icon">🧠</span>
+        <h3>Multi-Agent Intelligence</h3>
+        <p>A coordinated network of AI agents specializing in hypothesis generation, instrument control, data analysis, and knowledge synthesis.</p>
+      </div>
+      <div class="trio-card reveal d2">
+        <span class="trio-icon">🔁</span>
+        <h3>Continual Learning</h3>
+        <p>The system evolves with every experiment, building a growing knowledge base that guides exploration toward the most promising materials.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- RESEARCH -->
+<section class="section" id="research">
+  <div class="container">
+    <div class="split">
+      <div class="reveal">
+        <div class="kicker">Research Vision</div>
+        <h2 class="heading">From Self-Driving<br>to Self-Evolving</h2>
+        <div class="body-copy">
+          <p>Our system goes beyond automation. It is a self-evolving laboratory that learns from each experimental cycle — continuously building intuition about 2D quantum systems.</p>
+          <p>By integrating large language models, physics-informed AI, and robotic instrumentation, the platform autonomously navigates the vast chemical and structural space of 2D quantum materials.</p>
+          <p>Past experimental outcomes directly inform future exploration strategies, creating an ever-improving loop of discovery.</p>
+        </div>
+      </div>
+      <div class="stat-grid reveal d1">
+        <div class="stat-tile">
+          <div class="stat-val">2D</div>
+          <div class="stat-label">Quantum Material<br>Discovery</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-val">AI</div>
+          <div class="stat-label">Multi-Agent<br>Architecture</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-val">24/7</div>
+          <div class="stat-label">Autonomous<br>Operation</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-val">∞</div>
+          <div class="stat-label">Continual<br>Learning</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- FIGURES -->
+<section class="section section-gray" id="results">
+  <div class="container">
+    <div class="kicker">Results</div>
+    <h2 class="heading">Experimental Findings</h2>
+    <div class="fig-grid">
+
+      <div class="fig-card reveal">
+        <img src="hardware.png" alt="Laboratory Hardware" />
+        <div class="fig-meta">
+          <div class="fig-label">Figure 1</div>
+          <h4>Laboratory Hardware Setup</h4>
+          <p>The physical instrumentation platform enabling automated sample preparation and characterization.</p>
+        </div>
+      </div>
+
+      <div class="fig-card reveal d1">
+        <img src="Picture1.png" alt="2D Quantum Material" />
+        <div class="fig-meta">
+          <div class="fig-label">Figure 2</div>
+          <h4>2D Quantum Material Sample</h4>
+          <p>Representative data from an autonomously identified 2D quantum material candidate.</p>
+        </div>
+      </div>
+
+      <div class="fig-card reveal">
+        <img src="assets/figure3.svg" alt="Multi-Agent Architecture" class="contain" />
+        <div class="fig-meta">
+          <div class="fig-label">Figure 3</div>
+          <h4>Multi-Agent System Architecture</h4>
+          <p>Hierarchical agent structure coordinating hypothesis generation, experimentation, and learning.</p>
+        </div>
+      </div>
+
+      <div class="fig-card reveal d1">
+        <img src="assets/figure4.svg" alt="Discovery Pipeline" class="contain" />
+        <div class="fig-meta">
+          <div class="fig-label">Figure 4</div>
+          <h4>Autonomous Discovery Pipeline</h4>
+          <p>End-to-end workflow from initial material hypothesis through experimental validation and knowledge integration.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- VIDEOS -->
+<section class="section" id="demos">
+  <div class="container-wide">
+    <div class="vid-header">
+      <div>
+        <div class="kicker">Demonstrations</div>
+        <h2 class="heading">See It in Action</h2>
+      </div>
+      <p style="font-size:.9rem;color:var(--sub);max-width:280px;line-height:1.55;">Live recordings of the autonomous system operating in the laboratory.</p>
+    </div>
+    <div class="vid-grid">
+
+      <div class="vid-card reveal">
+        <iframe src="https://drive.google.com/file/d/1fBiLAGb_rZAWnMWmA5gYZAYp2UEePhke/preview" allowfullscreen></iframe>
+        <div class="vid-meta">
+          <div class="vid-label">Demo 1</div>
+          <h4>Full System Demo</h4>
+        </div>
+      </div>
+
+      <div class="vid-card reveal d1">
+        <iframe src="https://drive.google.com/file/d/1n1ojCbCL1qT0shXFMuHw0Rsqo-UZnpSD/preview" allowfullscreen></iframe>
+        <div class="vid-meta">
+          <div class="vid-label">Demo 2</div>
+          <h4>Real-World Process (Part 1)</h4>
+        </div>
+      </div>
+
+      <div class="vid-card reveal">
+        <iframe src="https://drive.google.com/file/d/1l6scKX7r842Nj8yZT-t0lvj6cew7GPK6/preview" allowfullscreen></iframe>
+        <div class="vid-meta">
+          <div class="vid-label">Demo 3</div>
+          <h4>Real-World Process (Part 2)</h4>
+        </div>
+      </div>
+
+      <div class="vid-card reveal d1">
+        <iframe src="https://drive.google.com/file/d/17OYwoKXnVJ96wCRI4XDh0gtdhB7ry0ZY/preview" allowfullscreen></iframe>
+        <div class="vid-meta">
+          <div class="vid-label">Demo 4</div>
+          <h4>UI Interface Demo</h4>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- TEAM -->
+<section class="section section-gray" id="team">
+  <div class="container">
+    <div class="kicker">Team</div>
+    <h2 class="heading">Wu Lab</h2>
+    <p class="body-copy">Pioneering the intersection of artificial intelligence and quantum materials science at Princeton University.</p>
+    <div class="team-card reveal">
+      <div class="avatar">吴</div>
+      <div class="team-name">Prof. Sanfeng Wu</div>
+      <div class="team-role">Principal Investigator</div>
+      <div class="team-inst">Department of Physics &nbsp;·&nbsp; Princeton University</div>
+      <p class="team-bio">The Wu Lab at Princeton focuses on quantum materials, 2D van der Waals systems, and next-generation AI-driven experimental platforms. Our mission is to accelerate the discovery of quantum materials through autonomous, self-evolving laboratory systems.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Wu Lab, Princeton University &nbsp;·&nbsp; Qumus</p>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(
+    es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
