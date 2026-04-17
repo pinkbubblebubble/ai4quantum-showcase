@@ -3,311 +3,356 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Qumus — Self-Driving Labs for 2D Quantum Material Discovery</title>
+  <title>Qumus — Autonomous Discovery of 2D Quantum Materials</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --blue:    #0071e3;
-      --blue-h:  #0077ed;
-      --text:    #1d1d1f;
-      --sub:     #6e6e73;
-      --dim:     #86868b;
-      --bg:      #f5f5f7;
-      --white:   #ffffff;
-      --border:  #d2d2d7;
+      --ink:      #0C0C14;
+      --ink2:     #161622;
+      --bone:     #F8F7F4;
+      --cream:    #F0EFE9;
+      --white:    #FFFFFF;
+      --text:     #1A1A24;
+      --sub:      #5E5E70;
+      --muted:    #9494A8;
+      --rule:     #E2E1DB;
+      --rule-dk:  rgba(255,255,255,0.08);
+      --azure:    #2563EB;
+      --azure-l:  #3B7AF6;
+      --violet:   #7C3AED;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
-                   'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
-      background: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bone);
       color: var(--text);
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
     }
 
     /* ── NAV ── */
-    nav {
+    #nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 900;
-      height: 48px;
+      height: 52px;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 22px;
-      background: rgba(255,255,255,0.85);
+      padding: 0 2.5rem;
+      transition: background .35s, border-color .35s;
+    }
+    #nav.dark {
+      background: rgba(12,12,20,0.88);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--rule-dk);
+    }
+    #nav.light {
+      background: rgba(248,247,244,0.9);
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border-bottom: 1px solid rgba(0,0,0,0.12);
+      border-bottom: 1px solid var(--rule);
     }
     .nav-logo {
-      font-size: .95rem; font-weight: 700; letter-spacing: -.025em;
-      color: var(--text); text-decoration: none;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 500; font-style: italic;
+      text-decoration: none; transition: color .3s;
     }
-    .nav-links { display: flex; gap: 1.6rem; list-style: none; }
+    #nav.dark .nav-logo { color: #fff; }
+    #nav.light .nav-logo { color: var(--text); }
+
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
     .nav-links a {
-      font-size: .78rem; color: rgba(0,0,0,0.55); text-decoration: none;
-      transition: color .15s;
+      font-size: .74rem; font-weight: 500; letter-spacing: .06em;
+      text-transform: uppercase; text-decoration: none; transition: color .2s;
     }
-    .nav-links a:hover { color: var(--text); }
+    #nav.dark .nav-links a { color: rgba(255,255,255,0.4); }
+    #nav.dark .nav-links a:hover { color: rgba(255,255,255,0.85); }
+    #nav.light .nav-links a { color: var(--sub); }
+    #nav.light .nav-links a:hover { color: var(--text); }
 
     /* ── HERO ── */
     .hero {
-      padding: 144px 24px 96px;
+      min-height: 100vh;
+      background: var(--ink);
+      /* Hexagonal dot lattice — references 2D quantum crystal structure */
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.048) 1.2px, transparent 1.2px),
+        radial-gradient(circle, rgba(255,255,255,0.048) 1.2px, transparent 1.2px);
+      background-size: 38px 66px;
+      background-position: 0 0, 19px 33px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
       text-align: center;
-      background: var(--white);
+      padding: 120px 2rem 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 500px; pointer-events: none;
+      background: radial-gradient(ellipse, rgba(37,99,235,.11) 0%, transparent 68%);
     }
 
-    .eyebrow {
-      display: inline-block;
-      font-size: .78rem; font-weight: 500; letter-spacing: .02em;
-      color: var(--blue);
-      margin-bottom: 1.4rem;
+    .hero-tag {
+      font-size: .68rem; font-weight: 500; letter-spacing: .18em;
+      text-transform: uppercase; color: rgba(255,255,255,0.32);
+      margin-bottom: 2.4rem;
+      animation: up .8s .05s both;
     }
-
     .hero h1 {
-      font-size: clamp(3.4rem, 8vw, 6.4rem);
-      font-weight: 700;
-      line-height: 1.04;
-      letter-spacing: -0.04em;
-      color: var(--text);
-      margin-bottom: 1.4rem;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.8rem, 10vw, 9rem);
+      font-weight: 500; font-style: italic;
+      line-height: 1.0; letter-spacing: -.025em;
+      color: #fff; margin-bottom: 2rem;
+      animation: up .9s .18s both;
     }
-
-    .hero-sub {
-      font-size: clamp(.95rem, 1.8vw, 1.2rem);
-      color: var(--sub);
-      max-width: 540px;
-      margin: 0 auto 2.4rem;
-      line-height: 1.6;
-      font-weight: 400;
+    .hero-desc {
+      font-size: clamp(.9rem, 1.7vw, 1.1rem);
+      color: rgba(255,255,255,0.4);
+      max-width: 480px; line-height: 1.68;
+      font-weight: 300; margin-bottom: 2.8rem;
+      animation: up .9s .32s both;
     }
-
-    .btn-group { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
-
+    .btn-row {
+      display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap;
+      animation: up .9s .45s both;
+    }
     .btn {
-      display: inline-flex; align-items: center; gap: .4rem;
-      padding: .62rem 1.5rem;
-      border-radius: 980px;
-      font-size: .88rem; font-weight: 400;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: background .15s, opacity .15s;
-      letter-spacing: -.01em;
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .62rem 1.5rem; border-radius: 100px;
+      font-size: .82rem; font-weight: 400; letter-spacing: .005em;
+      text-decoration: none; white-space: nowrap;
+      transition: all .18s;
     }
-    .btn-filled { background: var(--blue); color: #fff; }
-    .btn-filled:hover { background: var(--blue-h); }
-    .btn-ghost {
-      background: transparent;
-      color: var(--blue);
-      border: 1px solid rgba(0,0,0,0.16);
+    .btn-solid   { background: #fff; color: var(--ink); }
+    .btn-solid:hover   { background: rgba(255,255,255,.88); }
+    .btn-ghost-w {
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.65); background: transparent;
     }
-    .btn-ghost:hover { background: rgba(0,0,0,0.03); }
-
-    .wordmark-row {
-      margin-top: 4.5rem;
-      display: flex; align-items: center; justify-content: center; gap: 1.2rem;
-      font-size: .72rem; color: var(--dim); letter-spacing: .01em;
+    .btn-ghost-w:hover {
+      border-color: rgba(255,255,255,.4); color: #fff;
+      background: rgba(255,255,255,.05);
     }
-    .wordmark-sep { width: 1px; height: 12px; background: var(--border); }
+    .btn-blue  { background: var(--azure); color: #fff; }
+    .btn-blue:hover { background: var(--azure-l); }
+    .btn-ghost-d {
+      border: 1px solid rgba(0,0,0,.14); color: var(--sub); background: transparent;
+    }
+    .btn-ghost-d:hover { color: var(--text); border-color: rgba(0,0,0,.28); }
 
-    /* ── DIVIDER ── */
-    .rule { height: 1px; background: var(--border); }
+    .hero-foot {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 1rem;
+      font-size: .64rem; letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(255,255,255,.2); white-space: nowrap;
+      animation: up .9s .58s both;
+    }
+    .hero-foot-sep { width: 1px; height: 10px; background: rgba(255,255,255,.12); }
 
-    /* ── SECTION BASE ── */
-    .section { padding: 96px 24px; }
-    .section-gray { background: var(--bg); }
-    .container { max-width: 980px; margin: 0 auto; }
-    .container-wide { max-width: 1200px; margin: 0 auto; }
+    @keyframes up {
+      from { opacity:0; transform: translateY(18px); }
+      to   { opacity:1; transform: none; }
+    }
+
+    /* ── MANIFESTO ── */
+    .manifesto { background: var(--bone); padding: 92px 2rem; text-align: center; }
+    .manifesto blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.45rem, 3.2vw, 2.5rem);
+      font-style: italic; font-weight: 400;
+      color: var(--text); line-height: 1.38;
+      letter-spacing: -.02em; max-width: 800px; margin: 0 auto;
+    }
+    .manifesto blockquote em {
+      font-style: normal;
+      background: linear-gradient(130deg, var(--azure) 0%, var(--violet) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── SHARED ── */
+    .sec  { padding: 92px 2rem; }
+    .cream { background: var(--cream); }
+    .white { background: var(--white); }
+    .dark  { background: var(--ink); }
+    .rule  { height: 1px; background: var(--rule); }
+
+    .wrap   { max-width: 960px;  margin: 0 auto; }
+    .wrap-w { max-width: 1200px; margin: 0 auto; }
 
     .kicker {
-      font-size: .72rem; font-weight: 600;
-      letter-spacing: .1em; text-transform: uppercase;
-      color: var(--blue); margin-bottom: .85rem;
+      display: inline-block; font-size: .68rem; font-weight: 500;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: .9rem;
     }
-    .heading {
-      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      font-weight: 700; letter-spacing: -.03em;
-      line-height: 1.1; color: var(--text);
-      margin-bottom: 1rem;
-    }
-    .body-copy {
-      font-size: 1rem; color: var(--sub);
-      line-height: 1.75; max-width: 560px;
-    }
-    .body-copy p + p { margin-top: .9rem; }
+    .kicker-dim { color: rgba(255,255,255,.28); }
 
-    /* ── FEATURE TRIO ── */
+    .display {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 500; letter-spacing: -.025em;
+      line-height: 1.1; color: var(--text); margin-bottom: 1rem;
+    }
+    .display-w { color: #fff; }
+    .body {
+      font-size: .97rem; color: var(--sub);
+      line-height: 1.78; max-width: 520px; font-weight: 300;
+    }
+    .body p + p { margin-top: .85rem; }
+
+    /* ── FEATURE CARDS ── */
     .trio {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      overflow: hidden;
-      margin-top: 3.5rem;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--rule);
+      border: 1px solid var(--rule); border-radius: 20px;
+      overflow: hidden; margin-top: 3.5rem;
     }
-    .trio-card {
-      background: var(--white);
-      padding: 2.6rem 2rem;
-      transition: background .2s;
+    .trio-card { background: var(--white); padding: 2.6rem 2rem; transition: background .2s; }
+    .trio-card:hover { background: #fafaf8; }
+    .trio-num {
+      font-family: 'Space Mono', monospace;
+      font-size: .65rem; color: var(--muted); display: block; margin-bottom: 1.5rem;
     }
-    .trio-card:hover { background: #fafafa; }
-    .trio-icon { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
+    .trio-icon { font-size: 1.7rem; margin-bottom: .9rem; display: block; }
     .trio-card h3 {
-      font-size: 1.05rem; font-weight: 600;
-      letter-spacing: -.02em; color: var(--text);
-      margin-bottom: .55rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.12rem; font-weight: 500;
+      letter-spacing: -.02em; color: var(--text); margin-bottom: .55rem;
     }
-    .trio-card p { font-size: .88rem; color: var(--sub); line-height: 1.65; }
+    .trio-card p { font-size: .86rem; color: var(--sub); line-height: 1.65; font-weight: 300; }
 
     /* ── RESEARCH SPLIT ── */
-    .split {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 5rem; align-items: center;
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 5.5rem; align-items: start; }
+    .pull {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      font-style: italic; line-height: 1.5;
+      color: var(--text); letter-spacing: -.01em;
+      border-left: 2px solid var(--azure);
+      padding-left: 1.3rem; margin-top: 2.4rem;
     }
-    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
     .stat-tile {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 1.6rem;
+      background: var(--cream); border: 1px solid var(--rule);
+      border-radius: 14px; padding: 1.4rem;
     }
     .stat-val {
-      font-size: 2.6rem; font-weight: 700;
-      letter-spacing: -.06em; color: var(--blue);
-      line-height: 1;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem; font-weight: 500;
+      letter-spacing: -.05em; color: var(--azure); line-height: 1;
     }
-    .stat-label {
-      margin-top: .35rem;
-      font-size: .78rem; color: var(--sub); line-height: 1.4;
-    }
+    .stat-lbl { margin-top: .35rem; font-size: .74rem; color: var(--sub); line-height: 1.4; }
 
     /* ── FIGURES ── */
     .fig-grid {
       display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem; margin-top: 3.5rem;
+      gap: 1.2rem; margin-top: 3.5rem;
     }
     .fig-card {
-      background: var(--white);
-      border: 1px solid var(--border);
+      background: var(--white); border: 1px solid var(--rule);
       border-radius: 20px; overflow: hidden;
-      transition: box-shadow .3s ease, transform .3s ease;
+      transition: transform .3s, box-shadow .3s;
     }
-    .fig-card:hover {
-      box-shadow: 0 8px 32px rgba(0,0,0,.1);
-      transform: translateY(-3px);
+    .fig-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.08); }
+    .fig-img {
+      width: 100%; height: 252px; object-fit: cover;
+      display: block; background: var(--cream);
     }
-    .fig-card img {
-      width: 100%; height: 260px;
-      object-fit: cover; display: block;
-      background: var(--bg);
-    }
-    .fig-card img.contain { object-fit: contain; padding: 1.5rem; }
-    .fig-meta { padding: 1.2rem 1.5rem 1.4rem; }
-    .fig-label {
-      font-size: .68rem; font-weight: 700;
-      letter-spacing: .12em; text-transform: uppercase;
-      color: var(--blue); margin-bottom: .3rem;
+    .fig-img.contain { object-fit: contain; padding: 1.5rem; }
+    .fig-meta { padding: 1.25rem 1.5rem 1.5rem; }
+    .fig-code {
+      font-family: 'Space Mono', monospace;
+      font-size: .64rem; color: var(--azure);
+      letter-spacing: .06em; display: block; margin-bottom: .32rem;
     }
     .fig-meta h4 {
-      font-size: .97rem; font-weight: 600;
-      color: var(--text); margin-bottom: .3rem;
+      font-family: 'Playfair Display', serif;
+      font-size: .98rem; font-weight: 500; color: var(--text); margin-bottom: .28rem;
     }
-    .fig-meta p { font-size: .83rem; color: var(--sub); line-height: 1.5; }
+    .fig-meta p { font-size: .81rem; color: var(--sub); line-height: 1.5; font-weight: 300; }
 
     /* ── VIDEOS ── */
-    .vid-header {
-      display: flex; justify-content: space-between;
-      align-items: flex-end; margin-bottom: 3.5rem;
-      flex-wrap: wrap; gap: 1rem;
-    }
-    .vid-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-    }
+    .vid-top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3.5rem; flex-wrap: wrap; gap: 1rem; }
+    .vid-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
     .vid-card {
-      background: var(--bg);
-      border: 1px solid var(--border);
+      background: var(--cream); border: 1px solid var(--rule);
       border-radius: 20px; overflow: hidden;
-      transition: box-shadow .3s ease, transform .3s ease;
+      transition: transform .3s, box-shadow .3s;
     }
-    .vid-card:hover {
-      box-shadow: 0 8px 32px rgba(0,0,0,.09);
-      transform: translateY(-3px);
-    }
-    .vid-card iframe {
-      width: 100%; aspect-ratio: 16/9;
-      display: block; border: none;
-    }
+    .vid-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.07); }
+    .vid-card iframe { width: 100%; aspect-ratio: 16/9; display: block; border: none; }
     .vid-meta { padding: 1.1rem 1.4rem 1.3rem; background: var(--white); }
-    .vid-label {
-      font-size: .68rem; font-weight: 600;
-      letter-spacing: .1em; text-transform: uppercase;
-      color: var(--sub); margin-bottom: .25rem;
+    .vid-code {
+      font-family: 'Space Mono', monospace;
+      font-size: .64rem; color: var(--muted);
+      letter-spacing: .06em; display: block; margin-bottom: .22rem;
     }
-    .vid-meta h4 { font-size: .95rem; font-weight: 600; color: var(--text); }
+    .vid-meta h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: .96rem; font-weight: 500; color: var(--text);
+    }
 
     /* ── TEAM ── */
     .team-card {
-      max-width: 500px;
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 2.6rem;
-      margin-top: 3.5rem;
+      max-width: 460px; margin-top: 3.5rem;
+      background: var(--ink2); border: 1px solid var(--rule-dk);
+      border-radius: 22px; padding: 2.6rem;
     }
-    .avatar {
-      width: 64px; height: 64px; border-radius: 50%;
-      background: linear-gradient(135deg, #0071e3, #5856d6);
+    .t-avatar {
+      width: 58px; height: 58px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--azure), var(--violet));
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.55rem; color: #fff; margin-bottom: 1.4rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem; color: #fff; margin-bottom: 1.4rem;
     }
-    .team-name { font-size: 1.2rem; font-weight: 700; letter-spacing: -.025em; margin-bottom: .2rem; }
-    .team-role { font-size: .88rem; color: var(--blue); font-weight: 500; margin-bottom: .3rem; }
-    .team-inst { font-size: .83rem; color: var(--sub); margin-bottom: 1.2rem; }
-    .team-bio { font-size: .9rem; color: var(--sub); line-height: 1.68; }
+    .t-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 500; color: #fff;
+      letter-spacing: -.02em; margin-bottom: .18rem;
+    }
+    .t-role  { font-size: .8rem; color: rgba(100,160,255,.85); margin-bottom: .28rem; }
+    .t-inst  { font-size: .78rem; color: rgba(255,255,255,.28); margin-bottom: 1.3rem; }
+    .t-bio   { font-size: .88rem; color: rgba(255,255,255,.42); line-height: 1.7; font-weight: 300; }
 
     /* ── FOOTER ── */
     footer {
-      padding: 2.2rem 24px;
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-      text-align: center;
+      background: var(--ink); border-top: 1px solid var(--rule-dk);
+      padding: 2.2rem; text-align: center;
     }
-    footer p { font-size: .72rem; color: var(--dim); }
+    footer p { font-size: .68rem; color: rgba(255,255,255,.18); letter-spacing: .06em; }
 
-    /* ── SCROLL REVEAL ── */
-    .reveal {
+    /* ── REVEAL ── */
+    .rv {
       opacity: 0; transform: translateY(20px);
       transition: opacity .9s cubic-bezier(.25,.46,.45,.94),
                   transform .9s cubic-bezier(.25,.46,.45,.94);
     }
-    .reveal.visible { opacity: 1; transform: none; }
+    .rv.in { opacity: 1; transform: none; }
     .d1 { transition-delay: .1s; }
     .d2 { transition-delay: .2s; }
-    .d3 { transition-delay: .3s; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 860px) {
       .split { grid-template-columns: 1fr; gap: 3rem; }
-      .trio { grid-template-columns: 1fr; }
+      .trio  { grid-template-columns: 1fr; }
       .fig-grid, .vid-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 560px) {
-      nav { padding: 0 16px; }
+      #nav { padding: 0 1.2rem; }
       .nav-links { display: none; }
-      .section { padding: 72px 16px; }
-      .hero { padding: 120px 16px 72px; }
+      .sec { padding: 68px 1.2rem; }
+      .hero { padding: 108px 1.2rem 64px; }
     }
   </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
+<nav id="nav" class="dark">
   <a href="#" class="nav-logo">Qumus</a>
   <ul class="nav-links">
     <li><a href="#overview">Overview</a></li>
@@ -319,51 +364,63 @@
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <span class="eyebrow">Princeton University &nbsp;·&nbsp; Department of Physics</span>
-  <h1>AI for Quantum<br>Materials.</h1>
-  <p class="hero-sub">
-    A self-evolving multi-agent system that autonomously discovers
-    2D quantum materials — learning from every experiment to
-    continuously push the frontiers of materials science.
+<div class="hero">
+  <span class="hero-tag">Princeton University &nbsp;·&nbsp; Department of Physics</span>
+  <h1>Autonomous<br>Quantum<br>Discovery</h1>
+  <p class="hero-desc">
+    A self-evolving multi-agent system that discovers 2D quantum materials —
+    learning from every experiment to continuously push the frontiers of materials science.
   </p>
-  <div class="btn-group">
-    <a href="#demos" class="btn btn-filled">Watch Demos</a>
-    <a href="#research" class="btn btn-ghost">Learn More</a>
-    <a href="#" class="btn btn-ghost">Read Paper ↗</a>
-    <a href="#" class="btn btn-ghost">Try Platform ↗</a>
+  <div class="btn-row">
+    <a href="#demos" class="btn btn-solid">Watch Demos</a>
+    <a href="#research" class="btn btn-ghost-w">Research</a>
+    <a href="#" class="btn btn-ghost-w">Paper ↗</a>
+    <a href="#" class="btn btn-ghost-w">Platform ↗</a>
   </div>
-  <div class="wordmark-row">
+  <div class="hero-foot">
     <span>Wu Lab</span>
-    <span class="wordmark-sep"></span>
+    <span class="hero-foot-sep"></span>
     <span>Department of Physics</span>
-    <span class="wordmark-sep"></span>
+    <span class="hero-foot-sep"></span>
     <span>Princeton University</span>
+  </div>
+</div>
+
+<!-- MANIFESTO -->
+<section class="manifesto rv">
+  <div class="wrap">
+    <blockquote>
+      "From automated experiments to <em>self-evolving intelligence</em> —
+      Qumus learns from the past to autonomously discover
+      the quantum materials of the future."
+    </blockquote>
   </div>
 </section>
 
 <div class="rule"></div>
 
 <!-- OVERVIEW -->
-<section class="section section-gray" id="overview">
-  <div class="container">
-    <div class="kicker">The System</div>
-    <h2 class="heading">Self-Driving. Self-Evolving.<br>Fully Autonomous.</h2>
-    <p class="body-copy">From closed-loop experimentation to multi-agent intelligence — our platform redefines how quantum materials are discovered.</p>
+<section class="sec cream" id="overview">
+  <div class="wrap">
+    <span class="kicker">The System</span>
+    <h2 class="display">Self-Driving. Self-Evolving.<br>Fully Autonomous.</h2>
     <div class="trio">
-      <div class="trio-card reveal">
+      <div class="trio-card rv">
+        <span class="trio-num">01 &nbsp;—&nbsp; Self-Driving Lab</span>
         <span class="trio-icon">⚡</span>
-        <h3>Self-Driving Lab</h3>
-        <p>Fully automated pipelines that design, execute, and analyze experiments without human intervention — running continuously around the clock.</p>
+        <h3>Automated Experimentation</h3>
+        <p>Fully autonomous pipelines that design, execute, and analyze experiments without human intervention — running continuously around the clock.</p>
       </div>
-      <div class="trio-card reveal d1">
+      <div class="trio-card rv d1">
+        <span class="trio-num">02 &nbsp;—&nbsp; Multi-Agent Intelligence</span>
         <span class="trio-icon">🧠</span>
-        <h3>Multi-Agent Intelligence</h3>
-        <p>A coordinated network of AI agents specializing in hypothesis generation, instrument control, data analysis, and knowledge synthesis.</p>
+        <h3>Coordinated Agent Network</h3>
+        <p>A network of AI agents specializing in hypothesis generation, instrument control, data analysis, and knowledge synthesis — working in concert.</p>
       </div>
-      <div class="trio-card reveal d2">
+      <div class="trio-card rv d2">
+        <span class="trio-num">03 &nbsp;—&nbsp; Continual Learning</span>
         <span class="trio-icon">🔁</span>
-        <h3>Continual Learning</h3>
+        <h3>Experience-Driven Discovery</h3>
         <p>The system evolves with every experiment, building a growing knowledge base that guides exploration toward the most promising materials.</p>
       </div>
     </div>
@@ -373,34 +430,27 @@
 <div class="rule"></div>
 
 <!-- RESEARCH -->
-<section class="section" id="research">
-  <div class="container">
+<section class="sec white" id="research">
+  <div class="wrap">
     <div class="split">
-      <div class="reveal">
-        <div class="kicker">Research Vision</div>
-        <h2 class="heading">From Self-Driving<br>to Self-Evolving</h2>
-        <div class="body-copy">
+      <div class="rv">
+        <span class="kicker">Research Vision</span>
+        <h2 class="display">From Self-Driving<br>to Self-Evolving</h2>
+        <blockquote class="pull">
+          "The laboratory becomes a mind — it remembers, it learns, it explores."
+        </blockquote>
+      </div>
+      <div class="rv d1">
+        <div class="body" style="margin-bottom:2.2rem">
           <p>Our system goes beyond automation. It is a self-evolving laboratory that learns from each experimental cycle — continuously building intuition about 2D quantum systems.</p>
           <p>By integrating large language models, physics-informed AI, and robotic instrumentation, the platform autonomously navigates the vast chemical and structural space of 2D quantum materials.</p>
           <p>Past experimental outcomes directly inform future exploration strategies, creating an ever-improving loop of discovery.</p>
         </div>
-      </div>
-      <div class="stat-grid reveal d1">
-        <div class="stat-tile">
-          <div class="stat-val">2D</div>
-          <div class="stat-label">Quantum Material<br>Discovery</div>
-        </div>
-        <div class="stat-tile">
-          <div class="stat-val">AI</div>
-          <div class="stat-label">Multi-Agent<br>Architecture</div>
-        </div>
-        <div class="stat-tile">
-          <div class="stat-val">24/7</div>
-          <div class="stat-label">Autonomous<br>Operation</div>
-        </div>
-        <div class="stat-tile">
-          <div class="stat-val">∞</div>
-          <div class="stat-label">Continual<br>Learning</div>
+        <div class="stat-grid">
+          <div class="stat-tile"><div class="stat-val">2D</div><div class="stat-lbl">Quantum Material Discovery</div></div>
+          <div class="stat-tile"><div class="stat-val">AI</div><div class="stat-lbl">Multi-Agent Architecture</div></div>
+          <div class="stat-tile"><div class="stat-val">24/7</div><div class="stat-lbl">Autonomous Operation</div></div>
+          <div class="stat-tile"><div class="stat-val">∞</div><div class="stat-lbl">Continual Learning</div></div>
         </div>
       </div>
     </div>
@@ -410,48 +460,43 @@
 <div class="rule"></div>
 
 <!-- FIGURES -->
-<section class="section section-gray" id="results">
-  <div class="container">
-    <div class="kicker">Results</div>
-    <h2 class="heading">Experimental Findings</h2>
+<section class="sec cream" id="results">
+  <div class="wrap">
+    <span class="kicker">Results</span>
+    <h2 class="display">Experimental Findings</h2>
     <div class="fig-grid">
-
-      <div class="fig-card reveal">
-        <img src="hardware.png" alt="Laboratory Hardware" />
+      <div class="fig-card rv">
+        <img class="fig-img" src="hardware.png" alt="Lab Hardware" />
         <div class="fig-meta">
-          <div class="fig-label">Figure 1</div>
+          <span class="fig-code">FIG. 01</span>
           <h4>Laboratory Hardware Setup</h4>
           <p>The physical instrumentation platform enabling automated sample preparation and characterization.</p>
         </div>
       </div>
-
-      <div class="fig-card reveal d1">
-        <img src="Picture1.png" alt="2D Quantum Material" />
+      <div class="fig-card rv d1">
+        <img class="fig-img" src="Picture1.png" alt="2D Quantum Material" />
         <div class="fig-meta">
-          <div class="fig-label">Figure 2</div>
+          <span class="fig-code">FIG. 02</span>
           <h4>2D Quantum Material Sample</h4>
           <p>Representative data from an autonomously identified 2D quantum material candidate.</p>
         </div>
       </div>
-
-      <div class="fig-card reveal">
-        <img src="assets/figure3.svg" alt="Multi-Agent Architecture" class="contain" />
+      <div class="fig-card rv">
+        <img class="fig-img contain" src="assets/figure3.svg" alt="Multi-Agent Architecture" />
         <div class="fig-meta">
-          <div class="fig-label">Figure 3</div>
+          <span class="fig-code">FIG. 03</span>
           <h4>Multi-Agent System Architecture</h4>
-          <p>Hierarchical agent structure coordinating hypothesis generation, experimentation, and learning.</p>
+          <p>Hierarchical agent structure coordinating hypothesis generation, experimentation, and learning loops.</p>
         </div>
       </div>
-
-      <div class="fig-card reveal d1">
-        <img src="assets/figure4.svg" alt="Discovery Pipeline" class="contain" />
+      <div class="fig-card rv d1">
+        <img class="fig-img contain" src="assets/figure4.svg" alt="Discovery Pipeline" />
         <div class="fig-meta">
-          <div class="fig-label">Figure 4</div>
+          <span class="fig-code">FIG. 04</span>
           <h4>Autonomous Discovery Pipeline</h4>
           <p>End-to-end workflow from initial material hypothesis through experimental validation and knowledge integration.</p>
         </div>
       </div>
-
     </div>
   </div>
 </section>
@@ -459,82 +504,70 @@
 <div class="rule"></div>
 
 <!-- VIDEOS -->
-<section class="section" id="demos">
-  <div class="container-wide">
-    <div class="vid-header">
+<section class="sec white" id="demos">
+  <div class="wrap-w">
+    <div class="vid-top">
       <div>
-        <div class="kicker">Demonstrations</div>
-        <h2 class="heading">See It in Action</h2>
+        <span class="kicker">Demonstrations</span>
+        <h2 class="display">See It in Action</h2>
       </div>
-      <p style="font-size:.9rem;color:var(--sub);max-width:280px;line-height:1.55;">Live recordings of the autonomous system operating in the laboratory.</p>
+      <p class="body" style="max-width:260px">Live recordings of the autonomous system operating in the laboratory.</p>
     </div>
     <div class="vid-grid">
-
-      <div class="vid-card reveal">
+      <div class="vid-card rv">
         <iframe src="https://drive.google.com/file/d/1fBiLAGb_rZAWnMWmA5gYZAYp2UEePhke/preview" allowfullscreen></iframe>
-        <div class="vid-meta">
-          <div class="vid-label">Demo 1</div>
-          <h4>Full System Demo</h4>
-        </div>
+        <div class="vid-meta"><span class="vid-code">DEMO — 01</span><h4>Full System Demo</h4></div>
       </div>
-
-      <div class="vid-card reveal d1">
+      <div class="vid-card rv d1">
         <iframe src="https://drive.google.com/file/d/1n1ojCbCL1qT0shXFMuHw0Rsqo-UZnpSD/preview" allowfullscreen></iframe>
-        <div class="vid-meta">
-          <div class="vid-label">Demo 2</div>
-          <h4>Real-World Process (Part 1)</h4>
-        </div>
+        <div class="vid-meta"><span class="vid-code">DEMO — 02</span><h4>Real-World Process (Part 1)</h4></div>
       </div>
-
-      <div class="vid-card reveal">
+      <div class="vid-card rv">
         <iframe src="https://drive.google.com/file/d/1l6scKX7r842Nj8yZT-t0lvj6cew7GPK6/preview" allowfullscreen></iframe>
-        <div class="vid-meta">
-          <div class="vid-label">Demo 3</div>
-          <h4>Real-World Process (Part 2)</h4>
-        </div>
+        <div class="vid-meta"><span class="vid-code">DEMO — 03</span><h4>Real-World Process (Part 2)</h4></div>
       </div>
-
-      <div class="vid-card reveal d1">
+      <div class="vid-card rv d1">
         <iframe src="https://drive.google.com/file/d/17OYwoKXnVJ96wCRI4XDh0gtdhB7ry0ZY/preview" allowfullscreen></iframe>
-        <div class="vid-meta">
-          <div class="vid-label">Demo 4</div>
-          <h4>UI Interface Demo</h4>
-        </div>
+        <div class="vid-meta"><span class="vid-code">DEMO — 04</span><h4>UI Interface Demo</h4></div>
       </div>
-
     </div>
   </div>
 </section>
-
-<div class="rule"></div>
 
 <!-- TEAM -->
-<section class="section section-gray" id="team">
-  <div class="container">
-    <div class="kicker">Team</div>
-    <h2 class="heading">Wu Lab</h2>
-    <p class="body-copy">Pioneering the intersection of artificial intelligence and quantum materials science at Princeton University.</p>
-    <div class="team-card reveal">
-      <div class="avatar">吴</div>
-      <div class="team-name">Prof. Sanfeng Wu</div>
-      <div class="team-role">Principal Investigator</div>
-      <div class="team-inst">Department of Physics &nbsp;·&nbsp; Princeton University</div>
-      <p class="team-bio">The Wu Lab at Princeton focuses on quantum materials, 2D van der Waals systems, and next-generation AI-driven experimental platforms. Our mission is to accelerate the discovery of quantum materials through autonomous, self-evolving laboratory systems.</p>
+<section class="sec dark" id="team">
+  <div class="wrap">
+    <span class="kicker kicker-dim">Team</span>
+    <h2 class="display display-w">Wu Lab</h2>
+    <p class="body" style="color:rgba(255,255,255,.32);max-width:480px">Pioneering the intersection of artificial intelligence and quantum materials science at Princeton University.</p>
+    <div class="team-card rv">
+      <div class="t-avatar">吴</div>
+      <div class="t-name">Prof. Sanfeng Wu</div>
+      <div class="t-role">Principal Investigator</div>
+      <div class="t-inst">Department of Physics &nbsp;·&nbsp; Princeton University &nbsp;·&nbsp; <a href="https://sites.google.com/view/wu-laboratory/" target="_blank" rel="noopener" style="color:rgba(100,160,255,.7);text-decoration:none;border-bottom:1px solid rgba(100,160,255,.3)">Wu Lab ↗</a></div>
+      <p class="t-bio">Sanfeng Wu is an assistant professor of physics at Princeton University. He did his undergraduate work at the University of Science and Technology in Hefei, China, and received his Ph.D. from the department of physics at the University of Washington in 2016. He was the Pappalardo Fellow in Physics at MIT before receiving his appointment at Princeton. His main research areas are condensed matter physics, two-dimensional quantum matter and devices, and quantum information processes. He has received several awards and honors, including the Moore Foundation Award for the EPiQS Flexible Funding Ideas (2023), an AFOSR Young Investigator Award (2023), and a Sloan Research Fellowship (2023). He is also an associated faculty member at the Princeton Materials Institute and the Princeton Quantum Initiative.</p>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <p>© 2025 Wu Lab, Princeton University &nbsp;·&nbsp; Qumus</p>
 </footer>
 
 <script>
+  // Nav switches dark ↔ light as hero scrolls out
+  const nav  = document.getElementById('nav');
+  const hero = document.querySelector('.hero');
+  window.addEventListener('scroll', () => {
+    nav.className = hero.getBoundingClientRect().bottom <= 0 ? 'light' : 'dark';
+  }, { passive: true });
+
+  // Scroll reveal
   const io = new IntersectionObserver(
-    es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
-    { threshold: 0.08 }
+    es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }),
+    { threshold: 0.07 }
   );
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  document.querySelectorAll('.rv').forEach(el => io.observe(el));
 </script>
 
 </body>
