@@ -1,1 +1,7 @@
 NOTES.md
+NOTES-edit.md
+NOTES-edit.txt
+
+# Local-only working assets — never upload
+*.docx
+*.mp4
