@@ -229,26 +229,39 @@
     .trio-card p { font-size: .86rem; color: var(--sub); line-height: 1.65; font-weight: 300; }
 
     /* ── RESEARCH SPLIT ── */
-    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 5.5rem; align-items: start; }
-    .pull {
-      
-      font-size: clamp(1.1rem, 2vw, 1.5rem);
-       line-height: 1.5;
-      color: var(--text); letter-spacing: -.01em;
-      border-left: 2px solid var(--azure);
-      padding-left: 1.3rem; margin-top: 2.4rem;
+    .split {
+      display: grid; grid-template-columns: 5fr 6fr;
+      gap: 4.5rem; align-items: start;
     }
-    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+    .pull {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+      font-weight: 500; line-height: 1.45;
+      color: var(--text); letter-spacing: -.015em;
+      border-left: 2px solid var(--azure);
+      padding-left: 1.2rem; margin-top: 2.2rem;
+      max-width: 420px;
+    }
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1rem; margin-top: 4.5rem;
+    }
     .stat-tile {
       background: var(--cream); border: 1px solid var(--rule);
-      border-radius: 14px; padding: 1.4rem;
+      border-radius: 16px; padding: 1.6rem 1.5rem;
+      transition: transform .25s, border-color .25s;
     }
+    .stat-tile:hover { transform: translateY(-2px); border-color: rgba(37,99,235,.3); }
     .stat-val {
       font-family: 'Syne', sans-serif;
-      font-size: 2.4rem; font-weight: 700;
+      font-size: 2.6rem; font-weight: 700;
       letter-spacing: -.05em; color: var(--azure); line-height: 1;
     }
-    .stat-lbl { margin-top: .35rem; font-size: .74rem; color: var(--sub); line-height: 1.4; }
+    .stat-lbl {
+      margin-top: .55rem; font-size: .76rem;
+      color: var(--sub); line-height: 1.45;
+      letter-spacing: .005em;
+    }
 
     /* ── FIGURES ── */
     .fig-grid {
@@ -262,10 +275,12 @@
     }
     .fig-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.08); }
     .fig-img {
-      width: 100%; height: 252px; object-fit: cover;
-      display: block; background: var(--cream);
+      width: 100%; aspect-ratio: 4 / 3;
+      object-fit: contain;
+      display: block; background: #FAFAF7;
+      padding: 1.2rem;
     }
-    .fig-img.contain { object-fit: contain; padding: 1.5rem; }
+    .fig-img.cover { object-fit: cover; padding: 0; }
     .fig-meta { padding: 1.25rem 1.5rem 1.5rem; }
     .fig-code {
       font-family: 'DM Mono', monospace;
@@ -393,8 +408,10 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 860px) {
       .split { grid-template-columns: 1fr; gap: 3rem; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); margin-top: 3rem; }
       .trio  { grid-template-columns: 1fr; }
       .fig-grid, .vid-grid { grid-template-columns: 1fr; }
+      .pull { max-width: 100%; }
     }
     @media (max-width: 560px) {
       #nav { padding: 0 1.2rem; }
@@ -470,20 +487,21 @@
       <div class="rv">
         <span class="kicker">Research Vision</span>
         <h2 class="display">From Self-Driving<br>to Self-Evolving</h2>
+        <p class="pull">An AI experimentalist that hypothesizes, plans, executes, observes, and iterates — closing the scientific loop autonomously.</p>
       </div>
       <div class="rv d1">
-        <div class="body" style="margin-bottom:2.2rem">
+        <div class="body">
           <p>Qumus is the first LLM-based AI quantum material experimentalist — an embodied agent that closes the full scientific loop: hypothesizing, planning, executing, observing, analyzing, and reporting, all without human intervention.</p>
           <p>A hierarchical workflow architecture — atomic, molecular, and assembly-level operations — bridges natural-language reasoning to robotic action. Specialized sub-agents handle physics knowledge, lab readiness, device design, and fabrication, while a lead agent orchestrates the team.</p>
           <p>Every experiment becomes data. Structured databases and self-generated skill sets feed back into future runs, so Qumus continually sharpens its parameters, recipes, and judgment — turning each attempt into compound experimental intuition.</p>
         </div>
-        <div class="stat-grid">
-          <div class="stat-tile"><div class="stat-val">1st</div><div class="stat-lbl">AI-Created Graphene</div></div>
-          <div class="stat-tile"><div class="stat-val">1st</div><div class="stat-lbl">AI-Built 2D Transistor</div></div>
-          <div class="stat-tile"><div class="stat-val">6</div><div class="stat-lbl">LLM Backbones Tested</div></div>
-          <div class="stat-tile"><div class="stat-val">4</div><div class="stat-lbl">Specialized Sub-Agents</div></div>
-        </div>
       </div>
+    </div>
+    <div class="stat-grid rv">
+      <div class="stat-tile"><div class="stat-val">1st</div><div class="stat-lbl">AI-Created Graphene</div></div>
+      <div class="stat-tile"><div class="stat-val">1st</div><div class="stat-lbl">AI-Built 2D Transistor</div></div>
+      <div class="stat-tile"><div class="stat-val">6</div><div class="stat-lbl">LLM Backbones Tested</div></div>
+      <div class="stat-tile"><div class="stat-val">4</div><div class="stat-lbl">Specialized Sub-Agents</div></div>
     </div>
   </div>
 </section>
@@ -497,35 +515,35 @@
     <h2 class="display">From Architecture to Atomically Thin Devices</h2>
     <div class="fig-grid">
       <div class="fig-card rv">
-        <img class="fig-img contain" src="assets/figure3.svg" alt="Multi-Agent Architecture" />
+        <img class="fig-img" src="assets/fig1-architecture.png" alt="Qumus AI Architecture and Robotic Minilab" />
         <div class="fig-meta">
           <span class="fig-code">FIG. 01</span>
-          <h4>Multi-Agent Architecture</h4>
-          <p>Lead agent Qumus orchestrates Project Manager, Lab Manager, Device Expert, and Processing agents — each owning its own tools, databases, and physical operations.</p>
+          <h4>Architecture &amp; Embodiment</h4>
+          <p>The closed scientific loop, self-evolving modules, multi-agent collaboration network, and the compact robotic minilab — Qumus from cognition to hardware.</p>
         </div>
       </div>
       <div class="fig-card rv d1">
-        <img class="fig-img" src="hardware.png" alt="Robotic Minilab" />
+        <img class="fig-img" src="assets/fig2-minilab.png" alt="Labeled Robotic Minilab Components" />
         <div class="fig-meta">
           <span class="fig-code">FIG. 02</span>
           <h4>The Robotic Minilab</h4>
-          <p>A compact workstation unifying tape exfoliation, motorized microscopy, dual robotic arms, vacuum and heated stages, and sub-micron stacking — the embodied substrate of Qumus.</p>
+          <p>Tape gantry, robotic arms, motorized microscopy, vacuum and heated stages, and multi-axis alignment — every physical step of 2D material fabrication unified into one workstation.</p>
         </div>
       </div>
       <div class="fig-card rv">
-        <img class="fig-img" src="Picture1.png" alt="First AI-Created Graphene" />
+        <img class="fig-img" src="assets/fig3-graphene.png" alt="First AI-Created Graphene and Personality Profiles" />
         <div class="fig-meta">
           <span class="fig-code">FIG. 03</span>
           <h4>First AI-Created Graphene</h4>
-          <p>Autonomously exfoliated, identified, and recorded graphene flake — produced from a single user prompt, with zero human intervention.</p>
+          <p>End-to-end agentic flow for the prompt "Can you give me a graphene flake?" — culminating in an autonomously exfoliated, identified, and recorded monolayer, plus per-LLM personality profiles.</p>
         </div>
       </div>
       <div class="fig-card rv d1">
-        <img class="fig-img contain" src="assets/figure4.svg" alt="First AI-Built 2D Transistor" />
+        <img class="fig-img" src="assets/fig4-orchestration.png" alt="Multi-Agent Orchestration for Device Construction" />
         <div class="fig-meta">
           <span class="fig-code">FIG. 04</span>
-          <h4>First AI-Built 2D Transistor</h4>
-          <p>A graphene field-effect transistor assembled from an AI-designed stacking order in roughly three hours, end to end — a milestone for AI-driven quantum device fabrication.</p>
+          <h4>Building a 2D Transistor</h4>
+          <p>Multi-agent orchestration assembling a graphene field-effect transistor — Device Expert designs the stack, Processing Agent picks, aligns, and drops each flake onto patterned electrodes.</p>
         </div>
       </div>
     </div>
